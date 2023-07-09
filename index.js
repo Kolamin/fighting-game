@@ -67,6 +67,8 @@ const keys = {
   },
 };
 
+let lastKey;
+
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "black";
@@ -74,9 +76,11 @@ function animate() {
   player.update();
   enemy.update();
 
-  if (keys.a.pressed) {
-    player.velocity.x = 1;
-  } else if (keys.d.pressed) {
+  player.velocity.x = 0;
+
+  if (keys.a.pressed && lastKey === 'a') {
+    player.velocity.x = -1;
+  } else if (keys.d.pressed && lastKey === 'd') {
     player.velocity.x = 1;
   }
 }
@@ -86,10 +90,12 @@ animate();
 window.addEventListener("keydown", (event) => {
   switch (event.key) {
     case "d":
-      player.velocity.x = 1;
+      keys.d.pressed = true;
+      lastKey = 'd';
       break;
     case "a":
       keys.a.pressed = true;
+      lastKey = 'a';
       break;
   }
   console.log(event.key);
@@ -98,7 +104,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
   switch (event.key) {
     case "d":
-      player.velocity.x = 0;
+      keys.d.pressed = false;
       break;
     case "a":
       keys.a.pressed = false;
